@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.apk_decoding.R;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import java.io.BufferedReader;
@@ -28,15 +30,21 @@ public class Activity_Menu extends AppCompatActivity {
     }
 
     private void initViews() {
-        this.menu_BTN_start.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Activity_Menu.this.makeServerCall();
-            }
-        });
+        if(this.menu_BTN_start != null){
+            this.menu_BTN_start.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Log.d("pttt", "start button clicked");
+                    Activity_Menu.this.makeServerCall();
+                }
+            });
+        }else{
+            Log.d("pttt", "menu_BTN_start is null! Check activity_menu.xml");
+        }
     }
 
     private void findViews() {
         this.menu_BTN_start = (MaterialButton) findViewById(R.id.menu_BTN_start);
+
         this.menu_EDT_id = (TextInputEditText) findViewById(R.id.menu_EDT_id);
     }
 
@@ -45,7 +53,6 @@ public class Activity_Menu extends AppCompatActivity {
         new Thread() {
             public void run() {
                 String data = Activity_Menu.getJSON(Activity_Menu.this.getString(R.string.url));
-                Log.d("pttt", data);
                 if (data != null) {
                     Activity_Menu activity_Menu = Activity_Menu.this;
                     activity_Menu.startGame(activity_Menu.menu_EDT_id.getText().toString(), data);
@@ -56,10 +63,12 @@ public class Activity_Menu extends AppCompatActivity {
 
     /* access modifiers changed from: private */
     public void startGame(String id, String data) {
+        Log.d("pttt", "id: " + id + " data: " + data);
         String state = data.split(",")[Integer.valueOf(String.valueOf(id.charAt(7))).intValue()];
         Intent intent = new Intent(getBaseContext(), Activity_Game.class);
         intent.putExtra(Activity_Game.EXTRA_ID, id);
         intent.putExtra(Activity_Game.EXTRA_STATE, state);
+        Log.d("pttt", "state: " + state);
         startActivity(intent);
     }
 

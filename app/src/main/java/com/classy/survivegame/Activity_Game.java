@@ -1,10 +1,13 @@
 package com.classy.survivegame;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.apk_decoding.R;
 
 public class Activity_Game extends AppCompatActivity {
     public static final String EXTRA_ID = "EXTRA_ID";
@@ -36,23 +39,34 @@ public class Activity_Game extends AppCompatActivity {
 
     /* access modifiers changed from: private */
     public void arrowClicked(int direction) {
+        Log.e("pttt", "ArrowClicked " );
+
+
         if (this.goodToGo && direction != this.steps[this.currentLevel]) {
             this.goodToGo = false;
         }
         int i = this.currentLevel + 1;
         this.currentLevel = i;
+        Log.d("pttt", "currentLevel: " + this.currentLevel + "\n direction: " + direction + "\n goodToGo: " + this.goodToGo + "\n----------------" );
+        //Log.e("pttt", "here " );
         if (i >= this.steps.length) {
+            Log.d("pttt", "before FinishGame" );
+
             finishGame();
         }
     }
 
     private void finishGame() {
+        Log.d("pttt", "In FinishGame" );
         String state = getIntent().getStringExtra(EXTRA_STATE);
         if (this.goodToGo) {
-            Toast.makeText(this, "Survived in " + state, 1).show();
+            Toast.makeText(this, "Survived in " + state, Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(this, "You Failed ", 1).show();
+            Toast.makeText(this, "You Failed ", Toast.LENGTH_LONG).show();
+
         }
+        Log.d("pttt", "FinishGame -- goodToGo: "+ this.goodToGo + "\n----------------" );
+
         finish();
     }
 
